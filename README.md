@@ -4,9 +4,21 @@
 
 It uses version 2 of AAISPs [CHAOS](https://support.aa.net.uk/CHAOS) API.
 
+Currently graphs total quota and that remaining. Handles multiple lines associated with a single login.
+
 ## Screenshots ##
 
 x
+
+## Plugin config ##
+
+in /etc/munin/plugins-conf.d/aaisp:
+
+```
+[aaisp]
+env.username aa11
+env.password SomeLongPassword
+```
 
 ## Setup ##
 

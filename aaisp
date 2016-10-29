@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import urllib
+import json
+
+def main():
+    username = os.environ.get("username")
+    password = os.environ.get("password")
+    url = "https://chaos2.aa.net.uk/broadband/quota?control_login=%s&control_password=%s" % (username, password)
+    response = urllib.urlopen(url)
+    data = json.loads(response.read())
+    services = get_services(options=data["options"])
+    quota = data["quota"]
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "config":
+            config(services=services)
+    else:
+        fetch(services=services, quota=quota)
+    sys.exit(0)
+
+def config(services):
+    for key, value in services.iteritems():
+        print ""
+        print "multigraph quota_%s" % (key)
+        print "graph_title AAISP Quota - %s" % (value)
+        print "graph_category broadband"
+        print "graph_vlabel Data transferred"
+        print "quota.label Quota"
+        print "remaining.label Remaining"
+
+def fetch(services, quota):
+    for key, value in services.iteritems():
+        print ""
+        print "multigraph quota_%s" % (key)
+        for circuit in quota:
+            if circuit["ID"] == key:
+                monthly = int(circuit["quota_monthly"])
+                remaining = int(circuit["quota_remaining"])
+                print "quota.value %s" % (monthly)
+                print "remaining.value %s" % (remaining)
+
+def get_services(options):
+    services = {}
+    for option in options:
+        if option["title"] == "Service":
+            for service in option["option"][0]["choice"]:
+                if len(service["value"]) > 0:
+                    services[service["value"]] = service["title"]
+    return services
+
+if __name__ == "__main__":
+    main()
