@@ -14,7 +14,7 @@ in /etc/munin/plugins-conf.d/aaisp:
 
 ```
 [aaisp]
-env.username aa11
+env.username aa11@a
 env.password SomeLongPassword
 ```
 
@@ -27,3 +27,10 @@ env.password SomeLongPassword
 3. Set username and password in /etc/munin/plugin-conf.d
 
 4. Symlink script
+
+## Debugging ##
+
+```
+$ munin-run --debug aaisp config
+$ munin-run --debug aaisp
+```

@@ -6,8 +6,11 @@ import urllib
 import json
 
 def main():
-    username = os.environ.get("username")
-    password = os.environ.get("password")
+    username = os.environ.get("aaispuser")
+    password = os.environ.get("aaisppass")
+    if username is None or password is None:
+        print "Username and/or password not provided"
+        sys.exit(1)
     url = "https://chaos2.aa.net.uk/broadband/quota?control_login=%s&control_password=%s" % (username, password)
     response = urllib.urlopen(url)
     data = json.loads(response.read())
