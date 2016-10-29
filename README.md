@@ -1,10 +1,8 @@
-# AAISP plugins for Munin #
+# AAISP plugin for Munin #
 
-[Munin](http://munin-monitoring.org/) plugin to graph [Andrews & Arnold](http://aa.net.uk) / AAISP broadband quota.
+[Munin](http://munin-monitoring.org/) plugin to graph [Andrews & Arnold / AAISP](http://aa.net.uk) broadband quota. Handles multiple lines associated with a single login.
 
 It uses version 2 of AAISPs [CHAOS](https://support.aa.net.uk/CHAOS) API.
-
-Currently graphs total quota and that remaining. Handles multiple lines associated with a single login.
 
 ## Screenshots ##
 
