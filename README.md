@@ -6,7 +6,13 @@ It uses version 2 of AAISPs [CHAOS](https://support.aa.net.uk/CHAOS) API.
 
 ## Screenshots ##
 
-x
+Graph per line showing quota and data remaining:
+
+![ScreenShot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_multiple_lines_single.png)
+
+Multiple lines on a single graph displaying data remaining:
+
+![ScreenShot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_multiple_lines_combined.png)
 
 ## Plugin config ##
 
