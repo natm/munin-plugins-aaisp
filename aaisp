@@ -11,55 +11,98 @@ def main():
     if username is None or password is None:
         print "Username and/or password not provided"
         sys.exit(1)
-    url = "https://chaos2.aa.net.uk/broadband/quota?control_login=%s&control_password=%s" % (username, password)
+    url = "https://chaos2.aa.net.uk/broadband/info?control_login=%s&control_password=%s" % (username, password)
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     services = get_services(options=data["options"])
-    quota = data["quota"]
+    info = data["info"]
     if len(sys.argv) == 2:
         if sys.argv[1] == "config":
             config(services=services)
     else:
-        fetch(services=services, quota=quota)
+        fetch(services=services, info=info)
     sys.exit(0)
 
 def config(services):
     print ""
     print ""
     print "multigraph quota_combined"
-    print "graph_title AAISP Quota - All lines"
+    print "graph_title AAISP Quota remaining - All lines"
     print "graph_category broadband"
-    print "graph_vlabel Data transferred"
+    print "graph_vlabel Data remaining"
     for key, value in services.iteritems():
         print "quota_%s.label %s" % (key, value)
+    print ""
+    print "multigraph syncrate_downstream_combined"
+    print "graph_title AAISP Sync downstream - All lines"
+    print "graph_category broadband"
+    print "graph_vlabel Rate"
+    for key, value in services.iteritems():
+        print "downstream_%s.label %s" % (key, value)
+    print ""
+    print "multigraph syncrate_upstream_combined"
+    print "graph_title AAISP Sync upstream - All lines"
+    print "graph_category broadband"
+    print "graph_vlabel Rate"
+    for key, value in services.iteritems():
+        print "upstream_%s.label %s" % (key, value)
 
     for key, value in services.iteritems():
         print ""
         print "multigraph quota_%s" % (key)
         print "graph_title AAISP Quota - %s" % (value)
         print "graph_category broadband"
-        print "graph_vlabel Data transferred"
+        print "graph_vlabel Data"
         print "quota.label Quota"
         print "remaining.label Remaining"
+        print ""
+        print "multigraph syncrate_%s" % (key)
+        print "graph_title AAISP Sync - %s" % (value)
+        print "graph_category broadband"
+        print "graph_vlabel Rate"
+        print "downstream.label Downstream"
+        print "upstream.label Upstream"
 
-def fetch(services, quota):
+def fetch(services, info):
     print ""
     print "multigraph quota_combined"
     for key, value in services.iteritems():
-        for circuit in quota:
+        for circuit in info:
             if circuit["ID"] == key:
                 remaining = int(circuit["quota_remaining"])
                 print "quota_%s.value %s" % (key, remaining)
+    print ""
+    print "multigraph syncrate_downstream_combined"
+    for key, value in services.iteritems():
+        for circuit in info:
+            if circuit["ID"] == key:
+                downstream = int(circuit["tx_rate"])
+                print "downstream_%s.value %s" % (key, downstream)
+    print ""
+    print "multigraph syncrate_upstream_combined"
+    for key, value in services.iteritems():
+        for circuit in info:
+            if circuit["ID"] == key:
+                upstream = int(circuit["rx_rate"])
+                print "upstream_%s.value %s" % (key, upstream)
 
     for key, value in services.iteritems():
         print ""
         print "multigraph quota_%s" % (key)
-        for circuit in quota:
+        for circuit in info:
             if circuit["ID"] == key:
                 monthly = int(circuit["quota_monthly"])
                 remaining = int(circuit["quota_remaining"])
                 print "quota.value %s" % (monthly)
                 print "remaining.value %s" % (remaining)
+        print ""
+        print "multigraph syncrate_%s" % (key)
+        for circuit in info:
+            if circuit["ID"] == key:
+                upstream = int(circuit["rx_rate"])
+                downstream = int(circuit["tx_rate"])
+                print "upstream.value %s" % (upstream)
+                print "downstream.value %s" % (downstream)
 
 def get_services(options):
     services = {}

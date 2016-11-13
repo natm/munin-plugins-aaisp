@@ -1,10 +1,12 @@
 # AAISP plugin for Munin #
 
-[Munin](http://munin-monitoring.org/) plugin to graph [Andrews & Arnold / AAISP](http://aa.net.uk) broadband quota. Handles multiple lines associated with a single login.
+[Munin](http://munin-monitoring.org/) plugin to graph [Andrews & Arnold / AAISP](http://aa.net.uk) broadband quota and sync rates. Handles multiple lines associated with a single login.
 
 It uses version 2 of AAISPs [CHAOS](https://support.aa.net.uk/CHAOS) API.
 
 ## Screenshots ##
+
+### Quota ###
 
 Graph per line showing quota and data remaining:
 
@@ -13,6 +15,10 @@ Graph per line showing quota and data remaining:
 Multiple lines on a single graph displaying data remaining:
 
 ![ScreenShot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_multiple_lines_combined.png)
+
+### Sync rate ###
+
+TODO
 
 ## Plugin config ##
 
