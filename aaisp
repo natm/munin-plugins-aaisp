@@ -11,8 +11,9 @@ def main():
     if username is None or password is None:
         print "Username and/or password not provided"
         sys.exit(1)
-    url = "https://chaos2.aa.net.uk/broadband/info?control_login=%s&control_password=%s" % (username, password)
-    response = urllib.urlopen(url)
+    post_params = "control_login=%s&control_password=%s" % (username, password)
+    url = "https://chaos2.aa.net.uk/broadband/info"
+    response = urllib.urlopen(url, data=post_params)
     data = json.loads(response.read())
     services = get_services(options=data["options"])
     info = data["info"]
