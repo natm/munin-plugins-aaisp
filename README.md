@@ -10,15 +10,21 @@ It uses version 2 of AAISPs [CHAOS](https://support.aa.net.uk/CHAOS) API.
 
 Graph per line showing quota and data remaining:
 
-![ScreenShot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_multiple_lines_single.png)
+![Screenshot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_single_line_day.png) ![Screenshot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_single_line_month.png)
 
 Multiple lines on a single graph displaying data remaining:
 
-![ScreenShot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_multiple_lines_combined.png)
+![Screenshot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_multiple_lines_combined_day.png) ![Screenshot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/quota_multiple_lines_combined_month.png)
 
 ### Sync rate ###
 
-TODO
+A single line displaying down and upstream sync:
+
+![Screenshot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/syncrate_single_day.png)
+
+Multiple lines, downstream rates (upstream graph also produced):
+
+![Screenshot](https://raw.github.com/natm/munin-plugins-aaisp/master/docs/syncrate_downstream_combined_day.png)
 
 ## Plugin config ##
 
