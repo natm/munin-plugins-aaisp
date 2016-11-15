@@ -25,28 +25,30 @@ def main():
 
 def config(services):
     print ""
-    print ""
-    print "multigraph quota_combined"
-    print "graph_title AAISP Quota remaining - All lines"
-    print "graph_category broadband"
-    print "graph_vlabel Data remaining"
-    for key, service in services.iteritems():
-        if "quota_monthly" in service:
-            print "quota_%s.label %s" % (key, service["title"])
-    print ""
-    print "multigraph syncrate_downstream_combined"
-    print "graph_title AAISP Sync downstream - All lines"
-    print "graph_category broadband"
-    print "graph_vlabel Rate"
-    for key, service in services.iteritems():
-        print "downstream_%s.label %s" % (key, service["title"])
-    print ""
-    print "multigraph syncrate_upstream_combined"
-    print "graph_title AAISP Sync upstream - All lines"
-    print "graph_category broadband"
-    print "graph_vlabel Rate"
-    for key, service in services.iteritems():
-        print "upstream_%s.label %s" % (key, service["title"])
+    if len([s for s in services if "quota_monthly" in s]) > 1:
+        print ""
+        print "multigraph quota_combined"
+        print "graph_title AAISP Quota remaining - All lines"
+        print "graph_category broadband"
+        print "graph_vlabel Data remaining"
+        for key, service in services.iteritems():
+            if "quota_monthly" in service:
+                print "quota_%s.label %s" % (key, service["title"])
+    if len(services) > 1:
+        print ""
+        print "multigraph syncrate_downstream_combined"
+        print "graph_title AAISP Sync downstream - All lines"
+        print "graph_category broadband"
+        print "graph_vlabel Rate"
+        for key, service in services.iteritems():
+            print "downstream_%s.label %s" % (key, service["title"])
+        print ""
+        print "multigraph syncrate_upstream_combined"
+        print "graph_title AAISP Sync upstream - All lines"
+        print "graph_category broadband"
+        print "graph_vlabel Rate"
+        for key, service in services.iteritems():
+            print "upstream_%s.label %s" % (key, service["title"])
 
     for key, service in services.iteritems():
         if "quota_monthly" in service:
@@ -66,22 +68,24 @@ def config(services):
         print "upstream.label Upstream"
 
 def fetch(services):
-    print ""
-    print "multigraph quota_combined"
-    for key, service in services.iteritems():
-        if "quota_monthly" in service:
-            remaining = int(service["quota_remaining"])
-            print "quota_%s.value %s" % (key, remaining)
-    print ""
-    print "multigraph syncrate_downstream_combined"
-    for key, service in services.iteritems():
-        downstream = int(service["tx_rate"])
-        print "downstream_%s.value %s" % (key, downstream)
-    print ""
-    print "multigraph syncrate_upstream_combined"
-    for key, service in services.iteritems():
-        upstream = int(service["rx_rate"])
-        print "upstream_%s.value %s" % (key, upstream)
+    if len([s for s in services if "quota_monthly" in s]) > 1:
+        print ""
+        print "multigraph quota_combined"
+        for key, service in services.iteritems():
+            if "quota_monthly" in service:
+                remaining = int(service["quota_remaining"])
+                print "quota_%s.value %s" % (key, remaining)
+    if len(services) > 1:
+        print ""
+        print "multigraph syncrate_downstream_combined"
+        for key, service in services.iteritems():
+            downstream = int(service["tx_rate"])
+            print "downstream_%s.value %s" % (key, downstream)
+        print ""
+        print "multigraph syncrate_upstream_combined"
+        for key, service in services.iteritems():
+            upstream = int(service["rx_rate"])
+            print "upstream_%s.value %s" % (key, upstream)
 
     for key, service in services.iteritems():
         if "quota_monthly" in service:
