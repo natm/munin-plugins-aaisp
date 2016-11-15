@@ -4,6 +4,10 @@
 
 It uses version 2 of AAISPs [CHAOS](https://support.aa.net.uk/CHAOS) API.
 
+## Demos ##
+
+Live [demo install](https://munin.hw.esgob.com/broadband-day.html) with 3 lines.
+
 ## Screenshots ##
 
 ### Quota ###
