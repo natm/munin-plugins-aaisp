@@ -31,7 +31,8 @@ def config(services):
     print "graph_category broadband"
     print "graph_vlabel Data remaining"
     for key, service in services.iteritems():
-        print "quota_%s.label %s" % (key, service["title"])
+        if "quota_monthly" in service:
+            print "quota_%s.label %s" % (key, service["title"])
     print ""
     print "multigraph syncrate_downstream_combined"
     print "graph_title AAISP Sync downstream - All lines"
@@ -48,13 +49,14 @@ def config(services):
         print "upstream_%s.label %s" % (key, service["title"])
 
     for key, service in services.iteritems():
-        print ""
-        print "multigraph quota_%s" % (key)
-        print "graph_title AAISP Quota - %s" % (service["title"])
-        print "graph_category broadband"
-        print "graph_vlabel Data"
-        print "quota.label Quota"
-        print "remaining.label Remaining"
+        if "quota_monthly" in service:
+            print ""
+            print "multigraph quota_%s" % (key)
+            print "graph_title AAISP Quota - %s" % (service["title"])
+            print "graph_category broadband"
+            print "graph_vlabel Data"
+            print "quota.label Quota"
+            print "remaining.label Remaining"
         print ""
         print "multigraph syncrate_%s" % (key)
         print "graph_title AAISP Sync - %s" % (service["title"])
@@ -67,8 +69,9 @@ def fetch(services):
     print ""
     print "multigraph quota_combined"
     for key, service in services.iteritems():
-        remaining = int(service["quota_remaining"])
-        print "quota_%s.value %s" % (key, remaining)
+        if "quota_monthly" in service:
+            remaining = int(service["quota_remaining"])
+            print "quota_%s.value %s" % (key, remaining)
     print ""
     print "multigraph syncrate_downstream_combined"
     for key, service in services.iteritems():
@@ -81,12 +84,13 @@ def fetch(services):
         print "upstream_%s.value %s" % (key, upstream)
 
     for key, service in services.iteritems():
-        print ""
-        print "multigraph quota_%s" % (key)
-        monthly = int(service["quota_monthly"])
-        remaining = int(service["quota_remaining"])
-        print "quota.value %s" % (monthly)
-        print "remaining.value %s" % (remaining)
+        if "quota_monthly" in service:
+            print ""
+            print "multigraph quota_%s" % (key)
+            monthly = int(service["quota_monthly"])
+            remaining = int(service["quota_remaining"])
+            print "quota.value %s" % (monthly)
+            print "remaining.value %s" % (remaining)
         print ""
         print "multigraph syncrate_%s" % (key)
         upstream = int(service["rx_rate"])
