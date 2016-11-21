@@ -32,12 +32,12 @@ Multiple lines, downstream rates (upstream graph also produced):
 
 ## Plugin config ##
 
-in /etc/munin/plugins-conf.d/aaisp:
+in /etc/munin/plugin-conf.d/aaisp:
 
 ```
 [aaisp]
-env.username aa11@a
-env.password SomeLongPassword
+env.aaispuser aa11@a
+env.aaisppass SomeLongPassword
 ```
 
 ## Setup ##
