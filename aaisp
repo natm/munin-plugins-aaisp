@@ -15,103 +15,103 @@ def main():
     url = "https://chaos2.aa.net.uk/broadband/info"
     response = urllib.urlopen(url, data=post_params)
     data = json.loads(response.read())
-    services = get_services(options=data["options"])
-    info = data["info"]
+    services = get_services(data=data)
     if len(sys.argv) == 2:
         if sys.argv[1] == "config":
             config(services=services)
     else:
-        fetch(services=services, info=info)
+        fetch(services=services)
     sys.exit(0)
 
 def config(services):
     print ""
-    print ""
-    print "multigraph quota_combined"
-    print "graph_title AAISP Quota remaining - All lines"
-    print "graph_category broadband"
-    print "graph_vlabel Data remaining"
-    for key, value in services.iteritems():
-        print "quota_%s.label %s" % (key, value)
-    print ""
-    print "multigraph syncrate_downstream_combined"
-    print "graph_title AAISP Sync downstream - All lines"
-    print "graph_category broadband"
-    print "graph_vlabel Rate"
-    for key, value in services.iteritems():
-        print "downstream_%s.label %s" % (key, value)
-    print ""
-    print "multigraph syncrate_upstream_combined"
-    print "graph_title AAISP Sync upstream - All lines"
-    print "graph_category broadband"
-    print "graph_vlabel Rate"
-    for key, value in services.iteritems():
-        print "upstream_%s.label %s" % (key, value)
-
-    for key, value in services.iteritems():
+    if len([s for s in services if "quota_monthly" in s]) > 1:
         print ""
-        print "multigraph quota_%s" % (key)
-        print "graph_title AAISP Quota - %s" % (value)
+        print "multigraph quota_combined"
+        print "graph_title AAISP Quota remaining - All lines"
         print "graph_category broadband"
-        print "graph_vlabel Data"
-        print "quota.label Quota"
-        print "remaining.label Remaining"
+        print "graph_vlabel Data remaining"
+        for key, service in services.iteritems():
+            if "quota_monthly" in service:
+                print "quota_%s.label %s" % (key, service["title"])
+    if len(services) > 1:
+        print ""
+        print "multigraph syncrate_downstream_combined"
+        print "graph_title AAISP Sync downstream - All lines"
+        print "graph_category broadband"
+        print "graph_vlabel Rate"
+        for key, service in services.iteritems():
+            print "downstream_%s.label %s" % (key, service["title"])
+        print ""
+        print "multigraph syncrate_upstream_combined"
+        print "graph_title AAISP Sync upstream - All lines"
+        print "graph_category broadband"
+        print "graph_vlabel Rate"
+        for key, service in services.iteritems():
+            print "upstream_%s.label %s" % (key, service["title"])
+
+    for key, service in services.iteritems():
+        if "quota_monthly" in service:
+            print ""
+            print "multigraph quota_%s" % (key)
+            print "graph_title AAISP Quota - %s" % (service["title"])
+            print "graph_category broadband"
+            print "graph_vlabel Data"
+            print "quota.label Quota"
+            print "remaining.label Remaining"
         print ""
         print "multigraph syncrate_%s" % (key)
-        print "graph_title AAISP Sync - %s" % (value)
+        print "graph_title AAISP Sync - %s" % (service["title"])
         print "graph_category broadband"
         print "graph_vlabel Rate"
         print "downstream.label Downstream"
         print "upstream.label Upstream"
 
-def fetch(services, info):
-    print ""
-    print "multigraph quota_combined"
-    for key, value in services.iteritems():
-        for circuit in info:
-            if circuit["ID"] == key:
-                remaining = int(circuit["quota_remaining"])
-                print "quota_%s.value %s" % (key, remaining)
-    print ""
-    print "multigraph syncrate_downstream_combined"
-    for key, value in services.iteritems():
-        for circuit in info:
-            if circuit["ID"] == key:
-                downstream = int(circuit["tx_rate"])
-                print "downstream_%s.value %s" % (key, downstream)
-    print ""
-    print "multigraph syncrate_upstream_combined"
-    for key, value in services.iteritems():
-        for circuit in info:
-            if circuit["ID"] == key:
-                upstream = int(circuit["rx_rate"])
-                print "upstream_%s.value %s" % (key, upstream)
-
-    for key, value in services.iteritems():
+def fetch(services):
+    if len([s for s in services if "quota_monthly" in s]) > 1:
         print ""
-        print "multigraph quota_%s" % (key)
-        for circuit in info:
-            if circuit["ID"] == key:
-                monthly = int(circuit["quota_monthly"])
-                remaining = int(circuit["quota_remaining"])
-                print "quota.value %s" % (monthly)
-                print "remaining.value %s" % (remaining)
+        print "multigraph quota_combined"
+        for key, service in services.iteritems():
+            if "quota_monthly" in service:
+                remaining = int(service["quota_remaining"])
+                print "quota_%s.value %s" % (key, remaining)
+    if len(services) > 1:
+        print ""
+        print "multigraph syncrate_downstream_combined"
+        for key, service in services.iteritems():
+            downstream = int(service["tx_rate"])
+            print "downstream_%s.value %s" % (key, downstream)
+        print ""
+        print "multigraph syncrate_upstream_combined"
+        for key, service in services.iteritems():
+            upstream = int(service["rx_rate"])
+            print "upstream_%s.value %s" % (key, upstream)
+
+    for key, service in services.iteritems():
+        if "quota_monthly" in service:
+            print ""
+            print "multigraph quota_%s" % (key)
+            monthly = int(service["quota_monthly"])
+            remaining = int(service["quota_remaining"])
+            print "quota.value %s" % (monthly)
+            print "remaining.value %s" % (remaining)
         print ""
         print "multigraph syncrate_%s" % (key)
-        for circuit in info:
-            if circuit["ID"] == key:
-                upstream = int(circuit["rx_rate"])
-                downstream = int(circuit["tx_rate"])
-                print "upstream.value %s" % (upstream)
-                print "downstream.value %s" % (downstream)
+        upstream = int(service["rx_rate"])
+        downstream = int(service["tx_rate"])
+        print "upstream.value %s" % (upstream)
+        print "downstream.value %s" % (downstream)
 
-def get_services(options):
+def get_services(data):
     services = {}
-    for option in options:
+    for option in data["options"]:
         if option["title"] == "Service":
             for service in option["option"][0]["choice"]:
                 if len(service["value"]) > 0:
-                    services[service["value"]] = service["title"]
+                    for circuit in data["info"]:
+                        if circuit["ID"] == service["value"]:
+                            services[service["value"]] = circuit
+                    services[service["value"]]["title"] = service["title"]
     return services
 
 if __name__ == "__main__":
