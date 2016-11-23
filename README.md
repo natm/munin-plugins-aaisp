@@ -56,3 +56,16 @@ env.aaisppass SomeLongPassword
 $ munin-run --debug aaisp config
 $ munin-run --debug aaisp
 ```
+
+## License ##
+
+MIT
+
+## Contributing guidelines ##
+
+* Fork the repo
+* Create a branch
+* Make your changes
+* Open a pull request back from your branch to master in this repo
+
+Found a bug? open an [issue](https://github.com/natm/munin-plugins-aaisp/issues).
